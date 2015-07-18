@@ -15,3 +15,5 @@ Wrapper script for rsync to export files to USB backup drive
 - automount / encryption is handled by autofs and LUKS, not this package
 - use a lock file to control access to USB drive
 - allow for multiple backup paths to be specified (one chosen at random)
+- needs to work on RHEL5, CentoOS6 and Cygwin64 at a minimum
+- depends on the mailx command and rsync command
