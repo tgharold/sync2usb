@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# exit immediately on errors
+set -e
+# error out if uninitialized variable is used
+set -u
+
+
+
+
