@@ -20,5 +20,4 @@ Wrapper script for rsync to export files to USB backup drive
 
 
 
-# Test header
 
