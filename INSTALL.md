@@ -5,7 +5,7 @@ You will need 'git' to be installed on the system.
 
 Read-only anonymous clone:
 ------
-    $ git clone https://github.com/tgharold/rsync2usb.git
+    $ git clone https://github.com/tgharold/sync2usb.git
     $ cd rsync2usb/
     $ git checkout master
 
