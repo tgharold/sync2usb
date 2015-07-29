@@ -1,5 +1,5 @@
-# rsync2usb
-Wrapper script for rsync to export files to USB backup drive
+# sync2usb
+Wrapper script for rsync to export files to one or more USB backup drive(s).
 
 # Basic design goals
 
