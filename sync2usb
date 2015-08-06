@@ -9,6 +9,7 @@ set -u
 #
 # GLOBAL / USER:
 #
+# job_directory - location of job files
 # lvm_snapshotadd - Amount (in GiB) to add to the LV when doing the snapshot
 # lvm_thinflag - (possibly not needed), 'true' if LV is a "thin" LV
 # lvm_vgname - Volume Group name which contains the LV (optional)
@@ -24,13 +25,38 @@ set -u
 # backup_dir - Backup directory
 # lvm_lvname - Logical Volume name of the backup_base directory (optional)
 
-declare -a GlobalConfigVariables=( \
-  'lvm_snapshotadd', 'lvm_thinflag', 'lvm_vgname', \
-  'minimum_free_space', 'minimum_free_inodes', \
-  'usb_base', 'usb_prefix', 'usb_filename', 'usb_suffix', \
+declare -a GlobalConfigVariables=( 
+  'job_directory' 
+  'lvm_snapshotadd' 'lvm_thinflag' 'lvm_vgname' 
+  'minimum_free_space' 'minimum_free_inodes' 
+  'usb_base' 'usb_prefix' 'usb_filename' 'usb_suffix' 
   );
-declare -a JobSpecificVariables=( \
-  'backup_dir',
-  'lvm_lvname' \
+declare -a JobSpecificVariables=( 
+  'backup_dir' 
+  'lvm_lvname' 
   );
+
+# Set default values
+backup_dir=""
+job_directory="/etc/sync2usb.d/"
+lvm_lvname=""
+lvm_snapshotadd=10
+lvm_thinflag=true
+lvm_vgname=""
+minimum_free_space=25
+minimum_free_inodes=50000
+usb_base="/mnt/"
+usb_prefix=""
+usb_filename="BACKUP"
+usb_suffix="1 2 3 4 5 6 7 8 9"
+
+echo ${GlobalConfigVariables[@]}
+echo ${JobSpecificVariables[@]}
+
+for x in ${GlobalConfigVariables[@]}; do
+  eval GCV=\$$x    
+  echo "${x}=${GCV}"
+done
+
+
 
