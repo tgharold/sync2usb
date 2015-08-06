@@ -30,11 +30,13 @@ declare -a GlobalConfigVariables=(
   'lvm_snapshotadd' 'lvm_thinflag' 'lvm_vgname' 
   'minimum_free_space' 'minimum_free_inodes' 
   'usb_base' 'usb_prefix' 'usb_filename' 'usb_suffix' 
+  'verbosity'
   );
 declare -a JobSpecificVariables=( 
   'backup_dir' 
   'lvm_lvname' 
   );
+AllVariables=("${GlobalConfigVariables[@]}" "${JobSpecificVariables[@]}")
 
 # Set default values
 backup_dir=""
@@ -49,14 +51,14 @@ usb_base="/mnt/"
 usb_prefix=""
 usb_filename="BACKUP"
 usb_suffix="1 2 3 4 5 6 7 8 9"
+verbosity=2
 
-echo ${GlobalConfigVariables[@]}
-echo ${JobSpecificVariables[@]}
-
-for x in ${GlobalConfigVariables[@]}; do
-  eval GCV=\$$x    
-  echo "${x}=${GCV}"
-done
-
+if [ "$verbosity" -ge "2" ]; then
+  echo "Default Configuration Variables:"
+  for DefaultVariableName in ${AllVariables[@]}; do
+    eval VerboseListVariableDefaultValue=\$$DefaultVariableName
+    echo "${DefaultVariableName}=${VerboseListVariableDefaultValue}"
+  done
+fi
 
 
