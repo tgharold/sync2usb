@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# lists all configuration variables and values to stdout
 function list_variables ()
 {
 if [ "$verbosity" -ge "2" ]; then

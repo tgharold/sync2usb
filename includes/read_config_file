@@ -6,12 +6,12 @@ read_config_file ()
 {
   echo "Reading config file: $1"
   if test -f "$1"; then 
-    echo "The File Exists";
+    #echo "The File Exists";
     while read line; do
       if [[ "$line" =~ ^[^#]*= ]]; then
         setting_name=$(trim "${line%%=*}");
         setting_value=$(trim "${line#*=}");
-        echo 'found:' ${setting_name}'='${setting_value}
+        #echo 'found:' ${setting_name}'='${setting_value}
         case "$setting_name" in
           backup_dir)
             backup_dir="${setting_value}"
@@ -32,7 +32,18 @@ read_config_file ()
             lvm_vgname="${setting_value}"
             ;;
           minimum_free_space)
-            minimum_free_space="${setting_value}"
+            case "${setting_value}" in
+              ''|*[!0-9]*) 
+                exit_due_to_setting_error ${setting_name} ${setting_value} "Value is not an integer between 1 and 2000." 1
+                ;;
+              *)
+                if [[ ${setting_value} -ge 0 && ${setting_value} -le 2000 ]] ; then 
+                minimum_free_space="${setting_value}"
+                else
+                  exit_due_to_setting_error ${setting_name} ${setting_value} "Value is not between 1 and 2000." 1
+                fi
+                ;;
+            esac
             ;;
           minimum_free_inodes)
             minimum_free_inodes="${setting_value}"
@@ -53,7 +64,7 @@ read_config_file ()
             verbosity="${setting_value}"
             ;;
           *)
-            echo "WARN: ${setting_name} is not a valid configuration variable."
+            exit_due_to_setting_error ${setting_name} ${setting_value} "Variable name is not valid." 1
             ;;
         esac;
       fi

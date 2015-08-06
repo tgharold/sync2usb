@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# save all the config variables prior to
+# loading and executing a job file
 function push_config_variables ()
 {
   echo "push"
