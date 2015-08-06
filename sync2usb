@@ -5,6 +5,25 @@ set -e
 # error out if uninitialized variable is used
 set -u
 
+# Configuration Variables:
+#
+# GLOBAL / USER:
+#
+# lvm_snapshotadd - Amount (in GiB) to add to the LV when doing the snapshot
+# lvm_thinflag - (possibly not needed), 'true' if LV is a "thin" LV
+# lvm_vgname - Volume Group name which contains the LV (optional)
+# minimum_free_space - Measured in GiB (gigabytes), error if target has less, warn at 2x or less
+# minimum_free_inodes - Error if target file system has less, warn at 2x or less
+# usb_base - directory where USB backup drives are mounted
+# usb_prefix - space delimited list of letters/numbers used as prefixes
+# usb_filename - the unchanging portion of the mount directory
+# usb_suffix - space delimited list of letters/numbers used as suffixes
+#
+# JOB SPECIFIC:
+#
+# backup_dir - Backup directory
+# lvm_lvname - Logical Volume name of the backup_base directory (optional)
 
+declare -a 
 
 
