@@ -41,7 +41,7 @@ AllVariables=("${GlobalConfigVariables[@]}" "${JobSpecificVariables[@]}")
 
 # Set default values
 backup_dir=""
-job_directory="/etc/sync2usb.d/"
+job_directory="examples/"
 lvm_lvname=""
 lvm_snapshotadd=10
 lvm_thinflag=true
@@ -62,14 +62,25 @@ if [ "$verbosity" -ge "2" ]; then
   done
 fi
 
-GlobalConfigFilename="/etc/sync2usb.conf"
-UserConfigFilename="~/.sync2usb"
+GlobalConfigFilename="defaults/sync2usb.conf"
+UserConfigFilename="~/.sync2usb.conf"
 
 # read a configuration file
 # $1 - filename (full path)
 read_config_file () 
 {
   echo "Reading config file: $1"
+  if test -f "$1"; then 
+    echo "The File Exists";
+    while read line; do
+      if [[ "$line" =~ ^[^#]*= ]]; then
+        trimmed_line=${line%%#*}
+        echo "$trimmed_line"
+      fi
+    done < "$1";
+  else
+    echo "Did not find config file: $1"
+  fi
 }
 
 read_config_file ${GlobalConfigFilename}
