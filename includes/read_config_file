@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# read a configuration file
+# $1 - filename (full path)
+read_config_file () 
+{
+  echo "Reading config file: $1"
+  if test -f "$1"; then 
+    echo "The File Exists";
+    while read line; do
+      if [[ "$line" =~ ^[^#]*= ]]; then
+        setting_name=$(trim "${line%%=*}");
+        setting_value=$(trim "${line#*=}");
+        echo 'found:' ${setting_name}'='${setting_value}
+        case "$setting_name" in
+          backup_dir)
+            backup_dir="${setting_value}"
+            ;;
+          job_directory)
+            job_directory="${setting_value}"
+            ;;
+          lvm_lvname)
+            lvm_lvname="${setting_value}"
+            ;;
+          lvm_snapshotadd)
+            lvm_snapshotadd="${setting_value}"
+            ;;
+          lvm_thinflag)
+            lvm_thinflag="${setting_value}"
+            ;;
+          lvm_vgname)
+            lvm_vgname="${setting_value}"
+            ;;
+          minimum_free_space)
+            minimum_free_space="${setting_value}"
+            ;;
+          minimum_free_inodes)
+            minimum_free_inodes="${setting_value}"
+            ;;
+          usb_base)
+            usb_base="${setting_value}"
+            ;;
+          usb_prefix)
+            usb_prefix="${setting_value}"
+            ;;
+          usb_filename)
+            usb_filename="${setting_value}"
+            ;;
+          usb_suffix)
+            usb_suffix="${setting_value}"
+            ;;
+          verbosity)
+            verbosity="${setting_value}"
+            ;;
+          *)
+            echo "WARN: ${setting_name} is not a valid configuration variable."
+            ;;
+        esac;
+      fi
+    done < "$1";
+  else
+    echo "Did not find config file: $1"
+  fi
+}
+

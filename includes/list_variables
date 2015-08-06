@@ -1,0 +1,13 @@
+#!/bin/bash
+
+function list_variables ()
+{
+if [ "$verbosity" -ge "2" ]; then
+  echo "$1"
+  for VariableName in ${AllVariables[@]}; do
+    eval VerboseListVariableValue=\$$VariableName
+    echo "  ${VariableName}=${VerboseListVariableValue}"
+  done
+  echo ""
+fi
+}
