@@ -5,6 +5,9 @@ set -e
 # error out if uninitialized variable is used
 set -u
 
+# http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
+SCRIPTDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
 # Configuration Variables:
 #
 # GLOBAL / USER:
