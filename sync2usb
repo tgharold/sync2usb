@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# exit immediately on errors
+set -e
+# error out if uninitialized variable is used
+set -u
+
+# Configuration Variables:
+#
+# GLOBAL / USER:
+#
+# job_directory - location of job files
+# lvm_snapshotadd - Amount (in GiB) to add to the LV when doing the snapshot
+# lvm_thinflag - (possibly not needed), 'true' if LV is a "thin" LV
+# lvm_vgname - Volume Group name which contains the LV (optional)
+# minimum_free_space - Measured in GiB (gigabytes), error if target has less, warn at 2x or less
+# minimum_free_inodes - Error if target file system has less, warn at 2x or less
+# usb_base - directory where USB backup drives are mounted
+# usb_prefix - space delimited list of letters/numbers used as prefixes
+# usb_filename - the unchanging portion of the mount directory
+# usb_suffix - space delimited list of letters/numbers used as suffixes
+# verbosity - 0=none, 1=some info, 2=debug level
+#
+# JOB SPECIFIC:
+#
+# backup_dir - Backup directory
+# lvm_lvname - Logical Volume name of the backup_base directory (optional)
+
+declare -a GlobalConfigVariables=( 
+  'job_directory' 
+  'lvm_snapshotadd' 'lvm_thinflag' 'lvm_vgname' 
+  'minimum_free_space' 'minimum_free_inodes' 
+  'usb_base' 'usb_prefix' 'usb_filename' 'usb_suffix' 
+  'verbosity'
+  );
+declare -a JobSpecificVariables=( 
+  'backup_dir' 
+  'lvm_lvname' 
+  );
+AllVariables=("${GlobalConfigVariables[@]}" "${JobSpecificVariables[@]}")
+
+# Set default values
+backup_dir=""
+job_directory="/etc/sync2usb.d/"
+lvm_lvname=""
+lvm_snapshotadd=10
+lvm_thinflag=true
+lvm_vgname=""
+minimum_free_space=25
+minimum_free_inodes=50000
+usb_base="/mnt/"
+usb_prefix=""
+usb_filename="BACKUP"
+usb_suffix="1 2 3 4 5 6 7 8 9"
+verbosity=2
+
+if [ "$verbosity" -ge "2" ]; then
+  echo "Default Configuration Variables:"
+  for DefaultVariableName in ${AllVariables[@]}; do
+    eval VerboseListVariableDefaultValue=\$$DefaultVariableName
+    echo "${DefaultVariableName}=${VerboseListVariableDefaultValue}"
+  done
+fi
+
+GlobalConfigFilename="/etc/sync2usb.conf"
+UserConfigFilename="~/.sync2usb"
+
+# read a configuration file
+# $1 - filename (full path)
+read_config_file () 
+{
+  echo "Reading config file: $1"
+}
+
+read_config_file ${GlobalConfigFilename}
+read_config_file ${UserConfigFilename}
+
