@@ -54,14 +54,19 @@ usb_filename="BACKUP"
 usb_suffix="1 2 3 4 5 6 7 8 9"
 verbosity=2
 
+function list_variables ()
+{
 if [ "$verbosity" -ge "2" ]; then
-  echo "Default Configuration Variables:"
-  for DefaultVariableName in ${AllVariables[@]}; do
-    eval VerboseListVariableDefaultValue=\$$DefaultVariableName
-    echo "  ${DefaultVariableName}=${VerboseListVariableDefaultValue}"
+  echo "$1"
+  for VariableName in ${AllVariables[@]}; do
+    eval VerboseListVariableValue=\$$VariableName
+    echo "  ${VariableName}=${VerboseListVariableValue}"
   done
   echo ""
 fi
+}
+
+list_variables "Default Variables:"
 
 GlobalConfigFilename="defaults/sync2usb.conf"
 UserConfigFilename="~/.sync2usb.conf"
@@ -138,5 +143,7 @@ read_config_file ()
 }
 
 read_config_file ${GlobalConfigFilename}
+list_variables "Variables after ${GlobalConfigFilename}"
 read_config_file ${UserConfigFilename}
+list_variables "Variables after ${UserConfigFilename}"
 
