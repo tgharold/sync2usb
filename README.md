@@ -10,7 +10,6 @@ Wrapper script for rsync to export files to one or more USB backup drive(s).
 - crontab entry should be as simple as /usr/local/bin/rsync2usb
 - need an install script to create the symlink in /usr/local/bin
 - need an uninstall script to remove the symlink in /usr/local/bin
-- script should capture output and email to admins on error
 - check for USB drive running out of space
 - automount / encryption is handled by autofs and LUKS, not this package
 - use a lock file to control access to USB drive
