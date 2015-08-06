@@ -58,8 +58,9 @@ if [ "$verbosity" -ge "2" ]; then
   echo "Default Configuration Variables:"
   for DefaultVariableName in ${AllVariables[@]}; do
     eval VerboseListVariableDefaultValue=\$$DefaultVariableName
-    echo "${DefaultVariableName}=${VerboseListVariableDefaultValue}"
+    echo "  ${DefaultVariableName}=${VerboseListVariableDefaultValue}"
   done
+  echo ""
 fi
 
 GlobalConfigFilename="defaults/sync2usb.conf"
