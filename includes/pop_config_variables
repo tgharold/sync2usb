@@ -1,0 +1,7 @@
+#!/bin/bash
+
+function pop_config_variables ()
+{
+    echo "pop"
+}
+
