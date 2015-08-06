@@ -19,6 +19,7 @@ set -u
 # usb_prefix - space delimited list of letters/numbers used as prefixes
 # usb_filename - the unchanging portion of the mount directory
 # usb_suffix - space delimited list of letters/numbers used as suffixes
+# verbosity - 0=none, 1=some info, 2=debug level
 #
 # JOB SPECIFIC:
 #
@@ -61,4 +62,16 @@ if [ "$verbosity" -ge "2" ]; then
   done
 fi
 
+GlobalConfigFilename="/etc/sync2usb.conf"
+UserConfigFilename="~/.sync2usb"
+
+# read a configuration file
+# $1 - filename (full path)
+read_config_file () 
+{
+  echo "Reading config file: $1"
+}
+
+read_config_file ${GlobalConfigFilename}
+read_config_file ${UserConfigFilename}
 
