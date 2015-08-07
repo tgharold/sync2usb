@@ -140,10 +140,9 @@ read_config_file ()
             ;;
 
           usb_base)
+            Configuration[usb_base]="${setting_value}"
             if [ "${setting_value}" ]; then
-              if [ -d "${setting_value}" ]; then
-                Configuration[usb_base]="${setting_value}"
-              else
+              if [ ! -d "${setting_value}" ]; then
                 check_message="Directory does not exist."
                 config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
                 exit 1
