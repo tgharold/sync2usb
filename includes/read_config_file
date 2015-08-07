@@ -34,14 +34,14 @@ read_config_file ()
           minimum_free_space)
             case "${setting_value}" in
               ''|*[!0-9]*) 
-                config_error "${setting_name}" "${setting_value}" "Value is not an integer between 1 and 2000."
+                config_error "$1" "${setting_name}" "${setting_value}" "Value is not an integer between 1 and 2000."
                 exit 1
                 ;;
               *)
                 if [[ ${setting_value} -ge 0 && ${setting_value} -le 2000 ]] ; then 
                 minimum_free_space="${setting_value}"
                 else
-                  config_error "${setting_name}" "${setting_value}" "Value is not between 1 and 2000."
+                  config_error "$1" "${setting_name}" "${setting_value}" "Value is not between 1 and 2000."
                   exit 1
                 fi
                 ;;
@@ -66,7 +66,7 @@ read_config_file ()
             verbosity="${setting_value}"
             ;;
           *)
-            config_error "${setting_name}" "${setting_value}" "Variable name is not valid."
+            config_error "$1" "${setting_name}" "${setting_value}" "Variable name is not valid."
             exit 1
             ;;
         esac;

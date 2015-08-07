@@ -4,8 +4,10 @@
 function config_error()
 {
   echo ""
-  echo "CONFIG ERROR: $1=$2"
-  echo "  $3"
+  echo "CONFIG ERROR: $1"
+  echo ""
+  echo "$2=$3"
+  echo "  $4"
   echo ""
 }
 
