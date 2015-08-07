@@ -14,22 +14,36 @@ read_config_file ()
         #echo 'found:' ${setting_name}'='${setting_value}
         case "$setting_name" in
           backup_dir)
-            backup_dir="${setting_value}"
+            Configuration[backup_dir]="${setting_value}"
             ;;
           job_directory)
-            job_directory="${setting_value}"
+            Configuration[job_directory]="${setting_value}"
             ;;
           lvm_lvname)
-            lvm_lvname="${setting_value}"
+            Configuration[lvm_lvname]="${setting_value}"
             ;;
           lvm_snapshotadd)
-            lvm_snapshotadd="${setting_value}"
-            ;;
+            check_message="Value is not an integer between 1 and 2000."
+            case "${setting_value}" in
+              ''|*[!0-9]*)
+                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                exit 1
+                ;;
+              *)
+                if [[ ${setting_value} -ge 0 && ${setting_value} -le 2000 ]] ; then
+                Configuration[lvm_snapshotadd]="${setting_value}"
+                else
+                  config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                  exit 1
+                fi
+                ;;
+            esac
+            ;;            lvm_snapshotadd="${setting_value}"
           lvm_thinflag)
-            lvm_thinflag="${setting_value}"
+            Configuration[lvm_thinflag]="${setting_value}"
             ;;
           lvm_vgname)
-            lvm_vgname="${setting_value}"
+            Configuration[lvm_vgname]="${setting_value}"
             ;;
           minimum_free_space)
             check_message="Value is not an integer between 1 and 2000."
@@ -66,16 +80,16 @@ read_config_file ()
             esac
             ;;
           usb_base)
-            usb_base="${setting_value}"
+            Configuration[usb_base]="${setting_value}"
             ;;
           usb_prefix)
-            usb_prefix="${setting_value}"
+            Configuration[usb_prefix]="${setting_value}"
             ;;
           usb_filename)
-            usb_filename="${setting_value}"
+            Configuration[usb_filename]="${setting_value}"
             ;;
           usb_suffix)
-            usb_suffix="${setting_value}"
+            Configuration[usb_suffix]="${setting_value}"
             ;;
           verbosity)
             check_message="Value is not an integer between 1 and 2."
@@ -86,7 +100,7 @@ read_config_file ()
                 ;;
               *)
                 if [[ ${setting_value} -ge 0 && ${setting_value} -le 2 ]] ; then
-                verbosity="${setting_value}"
+                Configuration[verbosity]="${setting_value}"
                 else
                   config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
                   exit 1
