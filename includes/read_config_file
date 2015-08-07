@@ -43,7 +43,15 @@ read_config_file ()
             Configuration[lvm_thinflag]="${setting_value}"
             ;;
           lvm_vgname)
-            Configuration[lvm_vgname]="${setting_value}"
+            if [ "${setting_value}" ]; then
+              if vgdisplay --colon | fgrep -q " ${setting_value}:"; then
+                Configuration[lvm_vgname]="${setting_value}"
+              else
+                check_message="LVM Volume Group does not exist."
+                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                exit 1
+              fi
+            fi
             ;;
           minimum_free_space)
             check_message="Value is not an integer between 1 and 2000."
