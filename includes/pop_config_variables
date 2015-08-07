@@ -4,6 +4,9 @@
 # running a job file
 function pop_config_variables ()
 {
-    echo "pop"
+#echo "pop SavedConfiguration to Configuration"
+for idx in "${!SavedConfiguration[@]}"; do
+    Configuration[$idx]=${SavedConfiguration[$idx]}
+done
 }
 

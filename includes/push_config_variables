@@ -4,8 +4,9 @@
 # loading and executing a job file
 function push_config_variables ()
 {
-for VariableName in ${AllVariables[@]}; do
-  echo "${!VariableName}"
+#echo "push Configuration to SavedConfiguration"
+for idx in "${!Configuration[@]}"; do
+    SavedConfiguration[$idx]=${Configuration[$idx]}
 done
 }
 

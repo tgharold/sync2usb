@@ -15,6 +15,7 @@ declare -a JobSpecificVariables=(
 AllVariables=("${GlobalConfigVariables[@]}" "${JobSpecificVariables[@]}")
 
 typeset -A Configuration
+typeset -A SavedConfiguration
 
 GlobalConfigFilename="defaults/sync2usb.conf"
 UserConfigFilename="~/.sync2usb.conf"
