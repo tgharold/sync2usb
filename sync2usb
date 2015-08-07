@@ -8,6 +8,7 @@ set -u
 # http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
 SCRIPTDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 SCRIPTDIR="${SCRIPTDIR}/includes"
+source "${SCRIPTDIR}/globals"
 
 # Configuration Variables:
 #
@@ -29,19 +30,6 @@ SCRIPTDIR="${SCRIPTDIR}/includes"
 #
 # backup_dir - Backup directory
 # lvm_lvname - Logical Volume name of the backup_base directory (optional)
-
-declare -a GlobalConfigVariables=( 
-  'job_directory' 
-  'lvm_snapshotadd' 'lvm_thinflag' 'lvm_vgname' 
-  'minimum_free_space' 'minimum_free_inodes' 
-  'usb_base' 'usb_prefix' 'usb_filename' 'usb_suffix' 
-  'verbosity'
-  );
-declare -a JobSpecificVariables=( 
-  'backup_dir' 
-  'lvm_lvname' 
-  );
-AllVariables=("${GlobalConfigVariables[@]}" "${JobSpecificVariables[@]}")
 
 # Set default values
 backup_dir=""
