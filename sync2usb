@@ -28,7 +28,8 @@ source "${SCRIPTDIR}/globals"
 #
 # JOB SPECIFIC:
 #
-# backup_dir - Backup directory
+# backup_base - Location of the directory to be backed up
+# backup_dir - A directory inside the backup_base location
 # lvm_lvname - Logical Volume name of the backup_base directory (optional)
 
 # Set default values
