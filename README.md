@@ -34,7 +34,7 @@ Individual backup jobs can also override default / global / user settings.
 
 ## Global / User Variables:
 
-`job_directory` - location of job files
+`job_dir` - location of job files
 
 `lvm_snapshotadd` - Amount (in GiB) to add to the LV when doing the snapshot
 
@@ -65,6 +65,8 @@ These settings really only make sense in a `*.job` file.
 `backup_dir` - A directory inside the backup_base location
 
 `lvm_lvname` - Logical Volume name of the backup_base directory (optional)
+
+`usb_dir` - Directory name to use on USB drive (defaults to backup_dir)
 
 # Basic design goals
 
