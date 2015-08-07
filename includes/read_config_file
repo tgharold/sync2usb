@@ -91,14 +91,16 @@ read_config_file ()
             ;;
 
           minimum_free_space)
-            check_message="Value is not an integer between 1 and 2000."
+            integer_min = 1
+            integer_max = 2000
+            check_message="Value is not an integer between ${integer_min} and ${integer_max}."
             case "${setting_value}" in
               ''|*[!0-9]*) 
                 config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
                 exit 1
                 ;;
               *)
-                if [[ ${setting_value} -ge 0 && ${setting_value} -le 2000 ]] ; then 
+                if [[ ${setting_value} -ge ${integer_min} && ${setting_value} -le ${integer_max} ]] ; then
                 Configuration[minimum_free_space]="${setting_value}"
                 else
                   config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
@@ -109,14 +111,16 @@ read_config_file ()
             ;;
 
           minimum_free_inodes)
-            check_message="Value is not an integer between 1 and 250000."
+            integer_min = 1
+            integer_max = 250000
+            check_message="Value is not an integer between ${integer_min} and ${integer_max}."
             case "${setting_value}" in
               ''|*[!0-9]*)
                 config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
                 exit 1
                 ;;
               *)
-                if [[ ${setting_value} -ge 0 && ${setting_value} -le 250000 ]] ; then
+                if [[ ${setting_value} -ge ${integer_min} && ${setting_value} -le ${integer_max} ]] ; then
                 Configuration[minimum_free_inodes]="${setting_value}"
                 else
                   config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
@@ -143,14 +147,16 @@ read_config_file ()
             ;;
 
           verbosity)
-            check_message="Value is not an integer between 1 and 2."
+            integer_min = 0
+            integer_max = 2
+            check_message="Value is not an integer between ${integer_min} and ${integer_max}."
             case "${setting_value}" in
               ''|*[!0-9]*)
                 config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
                 exit 1
                 ;;
               *)
-                if [[ ${setting_value} -ge 0 && ${setting_value} -le 2 ]] ; then
+                if [[ ${setting_value} -ge ${integer_min} && ${setting_value} -le ${integer_max} ]] ; then
                 Configuration[verbosity]="${setting_value}"
                 else
                   config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
