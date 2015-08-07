@@ -32,32 +32,34 @@ read_config_file ()
             lvm_vgname="${setting_value}"
             ;;
           minimum_free_space)
+            check_message="Value is not an integer between 1 and 2000."
             case "${setting_value}" in
               ''|*[!0-9]*) 
-                config_error "$1" "${setting_name}" "${setting_value}" "Value is not an integer between 1 and 2000."
+                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
                 exit 1
                 ;;
               *)
                 if [[ ${setting_value} -ge 0 && ${setting_value} -le 2000 ]] ; then 
-                minimum_free_space="${setting_value}"
+                Configuration[minimum_free_space]="${setting_value}"
                 else
-                  config_error "$1" "${setting_name}" "${setting_value}" "Value is not between 1 and 2000."
+                  config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
                   exit 1
                 fi
                 ;;
             esac
             ;;
           minimum_free_inodes)
+            check_message="Value is not an integer between 1 and 250000."
             case "${setting_value}" in
               ''|*[!0-9]*)
-                config_error "$1" "${setting_name}" "${setting_value}" "Value is not an integer between 1 and 250000."
+                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
                 exit 1
                 ;;
               *)
                 if [[ ${setting_value} -ge 0 && ${setting_value} -le 250000 ]] ; then
-                minimum_free_inodes="${setting_value}"
+                Configuration[minimum_free_inodes]="${setting_value}"
                 else
-                  config_error "$1" "${setting_name}" "${setting_value}" "Value is not between 1 and 250000."
+                  config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
                   exit 1
                 fi
                 ;;
@@ -76,7 +78,21 @@ read_config_file ()
             usb_suffix="${setting_value}"
             ;;
           verbosity)
-            verbosity="${setting_value}"
+            check_message="Value is not an integer between 1 and 2."
+            case "${setting_value}" in
+              ''|*[!0-9]*)
+                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                exit 1
+                ;;
+              *)
+                if [[ ${setting_value} -ge 0 && ${setting_value} -le 2 ]] ; then
+                verbosity="${setting_value}"
+                else
+                  config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                  exit 1
+                fi
+                ;;
+            esac
             ;;
           *)
             config_error "$1" "${setting_name}" "${setting_value}" "Variable name is not valid."
