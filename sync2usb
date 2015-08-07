@@ -32,19 +32,19 @@ source "${SCRIPTDIR}/globals"
 # lvm_lvname - Logical Volume name of the backup_base directory (optional)
 
 # Set default values
-backup_dir=""
-job_directory="examples/"
-lvm_lvname=""
-lvm_snapshotadd=10
-lvm_thinflag=true
-lvm_vgname=""
-minimum_free_space=25
-minimum_free_inodes=50000
-usb_base="/mnt/"
-usb_prefix=""
-usb_filename="BACKUP"
-usb_suffix="1 2 3 4 5 6 7 8 9"
-verbosity=2
+Configuration[backup_dir]=""
+Configuration[job_directory]="examples/"
+Configuration[lvm_lvname]=""
+Configuration[lvm_snapshotadd]=10
+Configuration[lvm_thinflag]=true
+Configuration[lvm_vgname]=""
+Configuration[minimum_free_space]=25
+Configuration[minimum_free_inodes]=50000
+Configuration[usb_base]="/mnt/"
+Configuration[usb_prefix]=""
+Configuration[usb_filename]="BACKUP"
+Configuration[usb_suffix]="1 2 3 4 5 6 7 8 9"
+Configuration[verbosity]=2
 
 source "${SCRIPTDIR}/config_error"
 source "${SCRIPTDIR}/list_variables"
@@ -55,8 +55,6 @@ source "${SCRIPTDIR}/read_config_file"
 
 list_variables "Default Variables:"
 
-GlobalConfigFilename="defaults/sync2usb.conf"
-UserConfigFilename="~/.sync2usb.conf"
 
 read_config_file ${GlobalConfigFilename}
 list_variables "Variables after ${GlobalConfigFilename}"

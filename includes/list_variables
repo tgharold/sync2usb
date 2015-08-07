@@ -3,10 +3,10 @@
 # lists all configuration variables and values to stdout
 function list_variables ()
 {
-if [ "$verbosity" -ge "2" ]; then
+if [ "${Configuration[verbosity]}" -ge "2" ]; then
   echo "$1"
-  for VariableName in ${AllVariables[@]}; do
-    echo "  ${VariableName}=${!VariableName}"
+  for VariableName in "${!Configuration[@]}"; do
+    echo "  ${VariableName}=${Configuration[${VariableName}]}"
   done
   echo ""
 fi
