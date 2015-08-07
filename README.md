@@ -1,5 +1,24 @@
 # sync2usb
-Wrapper script for rsync to export files to one or more USB backup drive(s).
+Wrapper script for rsync to export files to one or more USB backup drive(s).  
+
+This is not a backup script itself, but is designed to copy existing backup
+files off the local system and onto a removable USB drive.  Therefore, it makes
+a few assumptions:
+
+- You have already written your backup to disk somewhere.
+- The backup files are collected in a directory.
+- You want to write the files to a similarly named directory on the USB drive.
+- In the case of multiple USB drives, they all have similar names.
+- If two or more drives are hooked up, it's okay to randomly pick one.
+
+The script offers optional support for LVM snapshots.  If your backup files are
+located on a Logical Volume (LV), then sync2usb can create a snapshot of the LV
+before starting the rsync.  This should result in your backup files being
+internally consistent on the USB drive.
+
+# Auto-mounting of USB drives
+
+See AUTOFS.md and LUKS.md.
 
 # Basic design goals
 
