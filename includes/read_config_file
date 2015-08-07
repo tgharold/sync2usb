@@ -37,12 +37,12 @@ read_config_file ()
             fi
             ;;
 
-          job_directory)
-            Configuration[job_directory]="${setting_value%/}"
-            if [ "${Configuration[job_directory]}" ]; then
-              if [ ! -d "${Configuration[job_directory]}" ]; then
-                check_message="Directory does not exist."
-                config_error "$1" "${setting_name}" "${Configuration[job_directory]}" "${check_message}"
+          job_dir)
+            Configuration[job_dir]="${setting_value%/}"
+            if [ "${Configuration[job_dir]}" ]; then
+              if [ ! -d "${Configuration[job_dir]}" ]; then
+                check_message="Directory ${Configuration[job_dir]} does not exist."
+                config_error "$1" "${setting_name}" "${Configuration[job_dir]}" "${check_message}"
                 exit 1
               fi
             fi
@@ -153,6 +153,11 @@ read_config_file ()
 
           usb_prefix)
             Configuration[usb_prefix]="${setting_value}"
+            ;;
+
+          usb_dir)
+            Configuration[usb_dir]="${setting_value#/}"
+            Configuration[usb_dir]="${Configuration[usb_dir]%/}"
             ;;
 
           usb_filename)

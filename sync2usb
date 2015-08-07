@@ -14,7 +14,7 @@ source "${SCRIPTDIR}/globals"
 #
 # GLOBAL / USER:
 #
-# job_directory - location of job files
+# job_dir - location of job files
 # lvm_snapshotadd - Amount (in GiB) to add to the LV when doing the snapshot
 # lvm_thinflag - (possibly not needed), 'true' if LV is a "thin" LV
 # lvm_vgname - Volume Group name which contains the LV (optional)
@@ -31,11 +31,12 @@ source "${SCRIPTDIR}/globals"
 # backup_base - Location of the directory to be backed up
 # backup_dir - A directory inside the backup_base location
 # lvm_lvname - Logical Volume name of the backup_base directory (optional)
+# usb_dir - Directory name to use on USB drive (defaults to backup_dir)
 
 # Set default values
 Configuration[backup_base]="/backup"
 Configuration[backup_dir]="test"
-Configuration[job_directory]="examples"
+Configuration[job_dir]="examples"
 Configuration[lvm_lvname]=""
 Configuration[lvm_snapshotadd]=10
 Configuration[lvm_thinflag]=true
@@ -43,6 +44,7 @@ Configuration[lvm_vgname]=""
 Configuration[minimum_free_space]=25
 Configuration[minimum_free_inodes]=50000
 Configuration[usb_base]="/mnt"
+Configuration[usb_dir]=""
 Configuration[usb_prefix]=""
 Configuration[usb_filename]="BACKUP"
 Configuration[usb_suffix]="1 2 3 4 5 6 7 8 9"
