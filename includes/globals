@@ -1,0 +1,22 @@
+#!/bin/bash
+# global variables / functions
+
+declare -a GlobalConfigVariables=( 
+  'job_directory' 
+  'lvm_snapshotadd' 'lvm_thinflag' 'lvm_vgname' 
+  'minimum_free_space' 'minimum_free_inodes' 
+  'usb_base' 'usb_prefix' 'usb_filename' 'usb_suffix' 
+  'verbosity'
+  );
+declare -a JobSpecificVariables=( 
+  'backup_base' 'backup_dir'
+  'lvm_lvname' 
+  );
+AllVariables=("${GlobalConfigVariables[@]}" "${JobSpecificVariables[@]}")
+
+typeset -A Configuration
+typeset -A SavedConfiguration
+
+GlobalConfigFilename="defaults/sync2usb.conf"
+UserConfigFilename="~/.sync2usb.conf"
+

@@ -1,0 +1,197 @@
+#!/bin/bash
+
+# read a configuration file
+# $1 - filename (full path)
+read_config_file () 
+{
+  echo "Reading config file: $1"
+  if test -f "$1"; then 
+    #echo "The File Exists";
+    while read line; do
+      if [[ "$line" =~ ^[^#]*= ]]; then
+        setting_name=$(trim "${line%%=*}");
+        setting_value=$(trim "${line#*=}");
+        #echo 'found:' ${setting_name}'='${setting_value}
+        case "$setting_name" in
+
+          backup_base)
+            Configuration[backup_base]="${setting_value%/}"
+            if [ "${Configuration[backup_base]}" ]; then
+              if [ ! -d "${Configuration[backup_base]}" ]; then
+                check_message="Directory does not exist."
+                config_error "$1" "${setting_name}" "${Configuration[backup_base]}" "${check_message}"
+                exit 1
+              fi
+            fi
+            ;;
+
+          backup_dir)
+            Configuration[backup_dir]="${setting_value#/}"
+            Configuration[backup_dir]="${Configuration[backup_dir]%/}"
+            if [ "${Configuration[backup_dir]}" ]; then
+              if [ ! -d "${Configuration[backup_base]}/${Configuration[backup_dir]}" ]; then
+                check_message="Directory ${Configuration[backup_base]}/${Configuration[backup_dir]} does not exist."
+                config_error "$1" "${setting_name}" "${Configuration[backup_dir]}" "${check_message}"
+                exit 1
+              fi
+            fi
+            ;;
+
+          job_directory)
+            Configuration[job_directory]="${setting_value%/}"
+            if [ "${Configuration[job_directory]}" ]; then
+              if [ ! -d "${Configuration[job_directory]}" ]; then
+                check_message="Directory does not exist."
+                config_error "$1" "${setting_name}" "${Configuration[job_directory]}" "${check_message}"
+                exit 1
+              fi
+            fi
+            ;;
+
+          lvm_lvname)
+            Configuration[lvm_lvname]="${setting_value}"
+            if [ "${Configuration[lvm_vgname]}" ]; then
+              if [ "${setting_value}" ]; then
+                # assumes that lvdisplay --colon output looks like
+                # dev/vg/lv0:vg:3:1:-1:1:51249152:391:-1:0:-1:253:0
+                if ! [[ $(lvdisplay --colon) == *"/${setting_value}:${Configuration[lvm_vgname]}:"* ]]; then
+                  check_message="Logical Volume does not exist in VG:${Configuration[lvm_vgname]}."
+                  config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                  exit 1
+                fi
+              fi
+            else
+              check_message="Cannot specify LV name if lvm_vgname is not set."
+              config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+              exit 1
+            fi
+            ;;
+
+          lvm_snapshotadd)
+            check_message="Value is not an integer between 1 and 2000."
+            case "${setting_value}" in
+              ''|*[!0-9]*)
+                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                exit 1
+                ;;
+              *)
+                if [[ ${setting_value} -ge 0 && ${setting_value} -le 2000 ]] ; then
+                Configuration[lvm_snapshotadd]="${setting_value}"
+                else
+                  config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                  exit 1
+                fi
+                ;;
+            esac
+            ;;
+
+          lvm_thinflag)
+            Configuration[lvm_thinflag]="${setting_value}"
+            ;;
+
+          lvm_vgname)
+            Configuration[lvm_vgname]="${setting_value}"
+            if [ "${setting_value}" ]; then
+              if ! [[ $(vgdisplay --colon) == *" ${Configuration[lvm_vgname]}:"* ]]; then
+                check_message="LVM Volume Group does not exist."
+                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                exit 1
+              fi
+            fi
+            ;;
+
+          minimum_free_space)
+            integer_min=1
+            integer_max=2000
+            check_message="Value is not an integer between ${integer_min} and ${integer_max}."
+            case "${setting_value}" in
+              ''|*[!0-9]*) 
+                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                exit 1
+                ;;
+              *)
+                if [[ ${setting_value} -ge ${integer_min} && ${setting_value} -le ${integer_max} ]] ; then
+                Configuration[minimum_free_space]="${setting_value}"
+                else
+                  config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                  exit 1
+                fi
+                ;;
+            esac
+            ;;
+
+          minimum_free_inodes)
+            integer_min=1
+            integer_max=250000
+            check_message="Value is not an integer between ${integer_min} and ${integer_max}."
+            case "${setting_value}" in
+              ''|*[!0-9]*)
+                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                exit 1
+                ;;
+              *)
+                if [[ ${setting_value} -ge ${integer_min} && ${setting_value} -le ${integer_max} ]] ; then
+                Configuration[minimum_free_inodes]="${setting_value}"
+                else
+                  config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                  exit 1
+                fi
+                ;;
+            esac
+            ;;
+
+          usb_base)
+            Configuration[usb_base]="${setting_value%/}"
+            if [ "${Configuration[usb_base]}" ]; then
+              if [ ! -d "${Configuration[usb_base]}" ]; then
+                check_message="Directory does not exist."
+                config_error "$1" "${setting_name}" "${Configuration[usb_base]}" "${check_message}"
+                exit 1
+              fi
+            fi
+            ;;
+
+          usb_prefix)
+            Configuration[usb_prefix]="${setting_value}"
+            ;;
+
+          usb_filename)
+            Configuration[usb_filename]="${setting_value}"
+            ;;
+
+          usb_suffix)
+            Configuration[usb_suffix]="${setting_value}"
+            ;;
+
+          verbosity)
+            integer_min=0
+            integer_max=2
+            check_message="Value is not an integer between ${integer_min} and ${integer_max}."
+            case "${setting_value}" in
+              ''|*[!0-9]*)
+                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                exit 1
+                ;;
+              *)
+                if [[ ${setting_value} -ge ${integer_min} && ${setting_value} -le ${integer_max} ]] ; then
+                Configuration[verbosity]="${setting_value}"
+                else
+                  config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                  exit 1
+                fi
+                ;;
+            esac
+            ;;
+
+          *)
+            config_error "$1" "${setting_name}" "${setting_value}" "Variable name is not valid."
+            exit 1
+            ;;
+        esac;
+      fi
+    done < "$1";
+  else
+    echo "Did not find config file: $1"
+  fi
+}
+

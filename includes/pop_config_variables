@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# restore the configuration variables after
+# running a job file
+function pop_config_variables ()
+{
+#echo "pop SavedConfiguration to Configuration"
+for idx in "${!SavedConfiguration[@]}"; do
+    Configuration[$idx]=${SavedConfiguration[$idx]}
+done
+}
+

@@ -5,6 +5,11 @@ set -e
 # error out if uninitialized variable is used
 set -u
 
+# http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
+SCRIPTDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+SCRIPTDIR="${SCRIPTDIR}/includes"
+source "${SCRIPTDIR}/globals"
+
 # Configuration Variables:
 #
 # GLOBAL / USER:
@@ -23,55 +28,40 @@ set -u
 #
 # JOB SPECIFIC:
 #
-# backup_dir - Backup directory
+# backup_base - Location of the directory to be backed up
+# backup_dir - A directory inside the backup_base location
 # lvm_lvname - Logical Volume name of the backup_base directory (optional)
 
-declare -a GlobalConfigVariables=( 
-  'job_directory' 
-  'lvm_snapshotadd' 'lvm_thinflag' 'lvm_vgname' 
-  'minimum_free_space' 'minimum_free_inodes' 
-  'usb_base' 'usb_prefix' 'usb_filename' 'usb_suffix' 
-  'verbosity'
-  );
-declare -a JobSpecificVariables=( 
-  'backup_dir' 
-  'lvm_lvname' 
-  );
-AllVariables=("${GlobalConfigVariables[@]}" "${JobSpecificVariables[@]}")
-
 # Set default values
-backup_dir=""
-job_directory="/etc/sync2usb.d/"
-lvm_lvname=""
-lvm_snapshotadd=10
-lvm_thinflag=true
-lvm_vgname=""
-minimum_free_space=25
-minimum_free_inodes=50000
-usb_base="/mnt/"
-usb_prefix=""
-usb_filename="BACKUP"
-usb_suffix="1 2 3 4 5 6 7 8 9"
-verbosity=2
+Configuration[backup_base]="/backup"
+Configuration[backup_dir]="test"
+Configuration[job_directory]="examples"
+Configuration[lvm_lvname]=""
+Configuration[lvm_snapshotadd]=10
+Configuration[lvm_thinflag]=true
+Configuration[lvm_vgname]=""
+Configuration[minimum_free_space]=25
+Configuration[minimum_free_inodes]=50000
+Configuration[usb_base]="/mnt"
+Configuration[usb_prefix]=""
+Configuration[usb_filename]="BACKUP"
+Configuration[usb_suffix]="1 2 3 4 5 6 7 8 9"
+Configuration[verbosity]=2
 
-if [ "$verbosity" -ge "2" ]; then
-  echo "Default Configuration Variables:"
-  for DefaultVariableName in ${AllVariables[@]}; do
-    eval VerboseListVariableDefaultValue=\$$DefaultVariableName
-    echo "${DefaultVariableName}=${VerboseListVariableDefaultValue}"
-  done
-fi
+source "${SCRIPTDIR}/config_error"
+source "${SCRIPTDIR}/list_variables"
+source "${SCRIPTDIR}/push_config_variables"
+source "${SCRIPTDIR}/pop_config_variables"
+source "${SCRIPTDIR}/trim"
+source "${SCRIPTDIR}/read_config_file"
 
-GlobalConfigFilename="/etc/sync2usb.conf"
-UserConfigFilename="~/.sync2usb"
+list_variables "Default Variables:"
 
-# read a configuration file
-# $1 - filename (full path)
-read_config_file () 
-{
-  echo "Reading config file: $1"
-}
 
 read_config_file ${GlobalConfigFilename}
+list_variables "Variables after ${GlobalConfigFilename}"
 read_config_file ${UserConfigFilename}
+list_variables "Variables after ${UserConfigFilename}"
 
+push_config_variables
+pop_config_variables

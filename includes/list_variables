@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# lists all configuration variables and values to stdout
+function list_variables ()
+{
+if [ "${Configuration[verbosity]}" -ge "2" ]; then
+  echo "$1"
+  for VariableName in "${!Configuration[@]}"; do
+    echo "  ${VariableName}=${Configuration[${VariableName}]}"
+  done
+  echo ""
+fi
+}
