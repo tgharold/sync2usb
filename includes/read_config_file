@@ -48,7 +48,20 @@ read_config_file ()
             esac
             ;;
           minimum_free_inodes)
-            minimum_free_inodes="${setting_value}"
+            case "${setting_value}" in
+              ''|*[!0-9]*)
+                config_error "$1" "${setting_name}" "${setting_value}" "Value is not an integer between 1 and 250000."
+                exit 1
+                ;;
+              *)
+                if [[ ${setting_value} -ge 0 && ${setting_value} -le 250000 ]] ; then
+                minimum_free_inodes="${setting_value}"
+                else
+                  config_error "$1" "${setting_name}" "${setting_value}" "Value is not between 1 and 250000."
+                  exit 1
+                fi
+                ;;
+            esac
             ;;
           usb_base)
             usb_base="${setting_value}"
