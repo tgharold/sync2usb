@@ -1,12 +1,11 @@
 #!/bin/bash
 
 # exit with error
-function exit_due_to_setting_error()
+function config_error()
 {
   echo ""
-  echo "ERROR: $1=$2"
+  echo "CONFIG ERROR: $1=$2"
   echo "  $3"
   echo ""
-  exit $4
 }
 
