@@ -91,8 +91,8 @@ read_config_file ()
             ;;
 
           minimum_free_space)
-            integer_min = 1
-            integer_max = 2000
+            integer_min=1
+            integer_max=2000
             check_message="Value is not an integer between ${integer_min} and ${integer_max}."
             case "${setting_value}" in
               ''|*[!0-9]*) 
@@ -111,8 +111,8 @@ read_config_file ()
             ;;
 
           minimum_free_inodes)
-            integer_min = 1
-            integer_max = 250000
+            integer_min=1
+            integer_max=250000
             check_message="Value is not an integer between ${integer_min} and ${integer_max}."
             case "${setting_value}" in
               ''|*[!0-9]*)
@@ -131,7 +131,15 @@ read_config_file ()
             ;;
 
           usb_base)
-            Configuration[usb_base]="${setting_value}"
+            if [ "${setting_value}" ]; then
+              if [ -d "${setting_value}" ]; then
+                Configuration[usb_base]="${setting_value}"
+              else
+                check_message="Directory does not exist."
+                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                exit 1
+              fi
+            fi
             ;;
 
           usb_prefix)
@@ -147,8 +155,8 @@ read_config_file ()
             ;;
 
           verbosity)
-            integer_min = 0
-            integer_max = 2
+            integer_min=0
+            integer_max=2
             check_message="Value is not an integer between ${integer_min} and ${integer_max}."
             case "${setting_value}" in
               ''|*[!0-9]*)
