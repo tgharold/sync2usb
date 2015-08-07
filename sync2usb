@@ -32,15 +32,16 @@ source "${SCRIPTDIR}/globals"
 # lvm_lvname - Logical Volume name of the backup_base directory (optional)
 
 # Set default values
-Configuration[backup_dir]=""
-Configuration[job_directory]="examples/"
+Configuration[backup_base]="/backup"
+Configuration[backup_dir]="test"
+Configuration[job_directory]="examples"
 Configuration[lvm_lvname]=""
 Configuration[lvm_snapshotadd]=10
 Configuration[lvm_thinflag]=true
 Configuration[lvm_vgname]=""
 Configuration[minimum_free_space]=25
 Configuration[minimum_free_inodes]=50000
-Configuration[usb_base]="/mnt/"
+Configuration[usb_base]="/mnt"
 Configuration[usb_prefix]=""
 Configuration[usb_filename]="BACKUP"
 Configuration[usb_suffix]="1 2 3 4 5 6 7 8 9"

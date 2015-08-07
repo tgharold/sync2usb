@@ -9,7 +9,7 @@ declare -a GlobalConfigVariables=(
   'verbosity'
   );
 declare -a JobSpecificVariables=( 
-  'backup_dir' 
+  'backup_base' 'backup_dir'
   'lvm_lvname' 
   );
 AllVariables=("${GlobalConfigVariables[@]}" "${JobSpecificVariables[@]}")

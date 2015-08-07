@@ -14,11 +14,10 @@ read_config_file ()
         #echo 'found:' ${setting_name}'='${setting_value}
         case "$setting_name" in
 
-          backup_dir)
+          backup_base)
+            Configuration[backup_base]="${setting_value}"
             if [ "${setting_value}" ]; then
-              if [ -d "${setting_value}" ]; then
-                Configuration[backup_dir]="${setting_value}"
-              else
+              if [ ! -d "${setting_value}" ]; then
                 check_message="Directory does not exist."
                 config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
                 exit 1
@@ -26,11 +25,21 @@ read_config_file ()
             fi
             ;;
 
-          job_directory)
+          backup_dir)
+            Configuration[backup_dir]="${setting_value}"
             if [ "${setting_value}" ]; then
-              if [ -d "${setting_value}" ]; then
-                Configuration[job_directory]="${setting_value}"
-              else
+              if [ ! -d "${Configuration[backup_base]}/${setting_value}" ]; then
+                check_message="Directory ${Configuration[backup_base]}/${setting_value} does not exist."
+                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                exit 1
+              fi
+            fi
+            ;;
+
+          job_directory)
+            Configuration[job_directory]="${setting_value}"
+            if [ "${setting_value}" ]; then
+              if [ ! -d "${setting_value}" ]; then
                 check_message="Directory does not exist."
                 config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
                 exit 1
@@ -39,12 +48,13 @@ read_config_file ()
             ;;
 
           lvm_lvname)
+            Configuration[lvm_lvname]="${setting_value}"
             if [ "${Configuration[lvm_vgname]}" ]; then
               if [ "${setting_value}" ]; then
-                if lvdisplay --colon | fgrep "/${Configuration[lvm_vgname]}/${setting_value}:" ; then
-                  Configuration[lvm_vgname]="${setting_value}"
-                else
-                  check_message="Logical Volume does not exist."
+                # assumes that lvdisplay --colon output looks like
+                # dev/vg/lv0:vg:3:1:-1:1:51249152:391:-1:0:-1:253:0
+                if ! [[ $(lvdisplay --colon) == *"/${setting_value}:${Configuration[lvm_vgname]}:"* ]]; then
+                  check_message="Logical Volume does not exist in VG:${Configuration[lvm_vgname]}."
                   config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
                   exit 1
                 fi
@@ -79,10 +89,9 @@ read_config_file ()
             ;;
 
           lvm_vgname)
+            Configuration[lvm_vgname]="${setting_value}"
             if [ "${setting_value}" ]; then
-              if vgdisplay --colon | fgrep -q " ${setting_value}:"; then
-                Configuration[lvm_vgname]="${setting_value}"
-              else
+              if ! [[ $(vgdisplay --colon) == *" ${Configuration[lvm_vgname]}:"* ]]; then
                 check_message="LVM Volume Group does not exist."
                 config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
                 exit 1
