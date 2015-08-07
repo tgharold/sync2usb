@@ -38,7 +38,7 @@ read_config_file ()
                 fi
                 ;;
             esac
-            ;;            lvm_snapshotadd="${setting_value}"
+            ;;
           lvm_thinflag)
             Configuration[lvm_thinflag]="${setting_value}"
             ;;
