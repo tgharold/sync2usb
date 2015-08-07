@@ -63,3 +63,5 @@ list_variables "Variables after ${GlobalConfigFilename}"
 read_config_file ${UserConfigFilename}
 list_variables "Variables after ${UserConfigFilename}"
 
+push_config_variables
+
