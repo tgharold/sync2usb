@@ -20,3 +20,5 @@ typeset -A SavedConfiguration
 GlobalConfigFilename="defaults/sync2usb.conf"
 UserConfigFilename="~/.sync2usb.conf"
 
+declare -a JobFiles=()
+

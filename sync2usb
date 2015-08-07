@@ -56,9 +56,9 @@ source "${SCRIPTDIR}/push_config_variables"
 source "${SCRIPTDIR}/pop_config_variables"
 source "${SCRIPTDIR}/trim"
 source "${SCRIPTDIR}/read_config_file"
+source "${SCRIPTDIR}/shuffle_JobFiles"
 
 list_variables "Default Variables:"
-
 
 read_config_file ${GlobalConfigFilename}
 list_variables "Variables after ${GlobalConfigFilename}"
