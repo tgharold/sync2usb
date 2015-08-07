@@ -15,33 +15,34 @@ read_config_file ()
         case "$setting_name" in
 
           backup_base)
-            Configuration[backup_base]="${setting_value}"
-            if [ "${setting_value}" ]; then
-              if [ ! -d "${setting_value}" ]; then
+            Configuration[backup_base]="${setting_value%/}"
+            if [ "${Configuration[backup_base]}" ]; then
+              if [ ! -d "${Configuration[backup_base]}" ]; then
                 check_message="Directory does not exist."
-                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                config_error "$1" "${setting_name}" "${Configuration[backup_base]}" "${check_message}"
                 exit 1
               fi
             fi
             ;;
 
           backup_dir)
-            Configuration[backup_dir]="${setting_value}"
-            if [ "${setting_value}" ]; then
-              if [ ! -d "${Configuration[backup_base]}/${setting_value}" ]; then
-                check_message="Directory ${Configuration[backup_base]}/${setting_value} does not exist."
-                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+            Configuration[backup_dir]="${setting_value#/}"
+            Configuration[backup_dir]="${Configuration[backup_dir]%/}"
+            if [ "${Configuration[backup_dir]}" ]; then
+              if [ ! -d "${Configuration[backup_base]}/${Configuration[backup_dir]}" ]; then
+                check_message="Directory ${Configuration[backup_base]}/${Configuration[backup_dir]} does not exist."
+                config_error "$1" "${setting_name}" "${Configuration[backup_dir]}" "${check_message}"
                 exit 1
               fi
             fi
             ;;
 
           job_directory)
-            Configuration[job_directory]="${setting_value}"
-            if [ "${setting_value}" ]; then
-              if [ ! -d "${setting_value}" ]; then
+            Configuration[job_directory]="${setting_value%/}"
+            if [ "${Configuration[job_directory]}" ]; then
+              if [ ! -d "${Configuration[job_directory]}" ]; then
                 check_message="Directory does not exist."
-                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                config_error "$1" "${setting_name}" "${Configuration[job_directory]}" "${check_message}"
                 exit 1
               fi
             fi
@@ -140,11 +141,11 @@ read_config_file ()
             ;;
 
           usb_base)
-            Configuration[usb_base]="${setting_value}"
-            if [ "${setting_value}" ]; then
-              if [ ! -d "${setting_value}" ]; then
+            Configuration[usb_base]="${setting_value%/}"
+            if [ "${Configuration[usb_base]}" ]; then
+              if [ ! -d "${Configuration[usb_base]}" ]; then
                 check_message="Directory does not exist."
-                config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
+                config_error "$1" "${setting_name}" "${Configuration[usb_base]}" "${check_message}"
                 exit 1
               fi
             fi
