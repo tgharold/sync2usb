@@ -1,0 +1,7 @@
+#
+#
+
+backup_base=/etc
+backup_dir=				profile.d   ####
+
+#####
