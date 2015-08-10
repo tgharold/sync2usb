@@ -64,6 +64,8 @@ read_config_file ${GlobalConfigFilename}
 list_variables "Variables after ${GlobalConfigFilename}"
 read_config_file ${UserConfigFilename}
 list_variables "Variables after ${UserConfigFilename}"
+read_config_file ${LocalConfigFilename}
+list_variables "Variables after ${LocalConfigFilename}"
 
 push_config_variables
 pop_config_variables
