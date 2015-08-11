@@ -26,7 +26,7 @@ The central global settings file is, by default, at `/etc/sync2usb.conf`. Any
 settings in this file will override the defaults.
 
 Users can have their own settings files, which override any default or global
-settings.  This file is `~/.sync2usb.conf`.
+settings.  This file is `sync2usb.conf` in the user's home directory.
 
 Individual backup jobs can also override default / global / user settings.
 
@@ -34,7 +34,7 @@ Individual backup jobs can also override default / global / user settings.
 
 ## Global / User Variables:
 
-`job_dir` - location of job files
+`job_dir` - location of job files (default "sync2usb.d" in user's home directory)
 
 `lvm_snapshotadd` - Amount (in GiB) to add to the LV when doing the snapshot
 
