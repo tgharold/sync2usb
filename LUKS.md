@@ -5,8 +5,8 @@
 
 ## Reference links
 
-https://wiki.archlinux.org/index.php/Dm-crypt
-http://ubuntuforums.org/showthread.php?t=837416
+- https://wiki.archlinux.org/index.php/Dm-crypt
+- http://ubuntuforums.org/showthread.php?t=837416
 
 # Interaction with Autofs
 
