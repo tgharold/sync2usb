@@ -24,7 +24,7 @@ LocalConfigFilename="sync2usb.conf"
 # Set default values
 Configuration[backup_base]="/backup"
 Configuration[backup_dir]="test"
-Configuration[job_dir]="~/sync2usb.d"
+Configuration[job_dir]="${HOME}/sync2usb.d"
 Configuration[lvm_lvname]=""
 Configuration[lvm_snapshotadd]=10
 Configuration[lvm_thinflag]=true
