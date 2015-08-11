@@ -17,9 +17,26 @@ AllVariables=("${GlobalConfigVariables[@]}" "${JobSpecificVariables[@]}")
 typeset -A Configuration
 typeset -A SavedConfiguration
 
-GlobalConfigFilename="defaults/sync2usb.conf"
-UserConfigFilename="~/.sync2usb.conf"
+GlobalConfigFilename="/etc/sync2usb.conf"
+UserConfigFilename="${HOME}/sync2usb.conf"
 LocalConfigFilename="sync2usb.conf"
+
+# Set default values
+Configuration[backup_base]="/backup"
+Configuration[backup_dir]="test"
+Configuration[job_dir]="~/sync2usb.d"
+Configuration[lvm_lvname]=""
+Configuration[lvm_snapshotadd]=10
+Configuration[lvm_thinflag]=true
+Configuration[lvm_vgname]=""
+Configuration[minimum_free_space]=25
+Configuration[minimum_free_inodes]=50000
+Configuration[usb_base]="/mnt"
+Configuration[usb_dir]=""
+Configuration[usb_prefix]=""
+Configuration[usb_filename]="BACKUP"
+Configuration[usb_suffix]="1 2 3 4 5 6 7 8 9"
+Configuration[verbosity]=2
 
 declare -a JobFiles=()
 
