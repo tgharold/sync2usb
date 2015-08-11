@@ -60,6 +60,10 @@ The rest of commands that I use when setting up a disk are:
 - `print` - Verify your changes
 - `quit` - Exit parted
 
+Please note that after partitioning the drive, we refer to the first partition by appending `-part1` to the
+end of the `/dev/disk/by-id/` value.  This is important during the `badblocks` and `shred` phase so
+that we do not overwrite the partition table that was just created.
+
 ## Verify the drive
 
 There is nothing worse then pulling a backup drive out of the padded bag and finding that your
