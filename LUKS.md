@@ -53,7 +53,7 @@ contents of the USB drive.
 The size of the passphrase that you choose should be at least 128 bits, and preferably 160 bits.
 If you use a tool that generates completely random output using upper-case letters, lower-case letters and 
 numbers, then you can use a passphrase as short as 32-35 characters.  But I suggest something
-in the 40-50 character range for safety.  A suitable one-liner
+in the 40-50 character range (or longer) for safety.  A suitable one-liner that generates a random passphrase is:
 
 ```
 $ echo $(dd if=/dev/random bs=256 count=1 iflag=fullblock 2>/dev/null | tr -dc 'a-zA-Z0-9')
@@ -75,7 +75,7 @@ For example, here is the 5TB Hitachi drive that I just plugged into my external 
 
 ```
 $ sudo ls -lt /dev/disk/by-id/ | grep 'usb'
-lrwxrwxrwx. 1 root root  9 Aug 11 05:17 usb-HGST_HDN_999999ZZZ999_000000000000-0:0 -> ../../sdp
+lrwxrwxrwx. 1 root root  9 Aug 11 05:17 usb-HGST_HDN_1234ABC789_123456-0:0 -> ../../sdp
 ```
 
 I strongly suggest that you always use the `/dev/disk/by-id/` name to refer to your drives rather
@@ -88,7 +88,7 @@ which are also consistent across reboots and system changes.
 
 ## Partition it with `parted`
 
-`$ sudo parted /dev/disk/by-id/usb-HGST_HDN_999999ZZZ999_000000000000-0:0`
+`$ sudo parted /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0`
 
 Assuming the drive is blank, then your first command will be `mklabel gpt`.  You can verify that the
 drive is blank, by using the `print` command inside of `parted`.
@@ -113,7 +113,7 @@ recommend a period of "burn-in" where you exercise the drive for a few days befo
 into active service.  The goal of a "burn-in" is to trigger an early failure for a drive that
 is of marginal quality, and to make sure that the drive can handle the load.
 
-`$ sudo badblocks -wsv -p 5 -t random /dev/disk/by-id/usb-HGST_HDN_999999ZZZ999_000000000000-0:0-part1`
+`$ sudo badblocks -wsv -p 5 -t random /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1`
 
 That uses the `badblocks` program to write random patterns to the disk over and over again until
 at least five passes do not have any errors.  Depending on the size of your drive and whether you
@@ -130,11 +130,15 @@ Shredding the drive writes a cryptographically strong random pattern to the driv
 how much of the drive has been used by LUKS for actual data storage.  Against the simple and low
 technology attacker it is not important, but it is still strongly suggested.
 
-`$ sudo shred -v /dev/disk/by-id/usb-HGST_HDN_999999ZZZ999_000000000000-0:0-part1`
+`$ sudo shred -v /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1`
 
 ## Format with `cryptsetup`
 
+`cryptsetup luksFormat /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1`
+
 ## Add the keyfile
+
+`cryptsetup luksAddKey /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1 /root/usb-keyfile`
 
 ## Modify udev.d rules
 
