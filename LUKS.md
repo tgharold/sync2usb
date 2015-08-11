@@ -36,9 +36,11 @@ for most purposes.  You could get by with a 128 byte file, or go a bit larger.  
 since this uses `/dev/random` which blocks, it may take 10-300 seconds to create the 256 byte file.
 Smaller files (256 byte) will generate faster.
 
-`$ sudo dd if=/dev/random of=/root/usb-keyfile bs=256 count=1 iflag=fullblock`
-`$ sudo chown root:root /root/usb-keyfile`
-`$ sudo chmod 0600 /root/usb-keyfile`
+```
+$ sudo dd if=/dev/random of=/root/usb-keyfile bs=256 count=1 iflag=fullblock
+$ sudo chown root:root /root/usb-keyfile
+$ sudo chmod 0600 /root/usb-keyfile
+```
 
 After creating the keyfile, I strongly suggest that you use GPG to encrypt it
 and then mail a copy to yourself.  Or place a copy on a [M-Disc](https://en.wikipedia.org/wiki/M-DISC) and store that
