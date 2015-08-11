@@ -3,9 +3,19 @@
 - what it is
 - why you would want to use it
 
+## Reference links
+
+https://wiki.archlinux.org/index.php/Dm-crypt
+http://ubuntuforums.org/showthread.php?t=837416
+
 # Interaction with Autofs
 
-# Creating a keyfile
+Interaction with `autofs` is pretty straightforward.  Through `udev` rules, you can have
+your USB drive partition automatically attached as `/dev/mapper/SOMETHING` and just have
+`autofs` look for that volume instead of looking for a `/dev/disk/by-id` or `/dev/disk/by-uuid`
+partiton.
+
+# Using a keyfile to unlock
 
 Whether or not you use keyfiles to protect your USB backup drive is determined by what
 threat you are trying to protect against.  For example, if you are defending against
@@ -21,7 +31,20 @@ finds the drive will be able to access the contents.
 
 ## Creating a keyfile
 
-(insert command to create a new keyfile, and chmod/chown it properly)
+Creation of a keyfile is not difficult.  The following creates a 256 byte file (2048 bits) which is overkill
+for most purposes.  You could get by with a 128 byte file, or go a bit larger.  Note that
+since this uses `/dev/random` which blocks, it may take 10-300 seconds to create the 256 byte file.
+Smaller files (256 byte) will generate faster.
+
+`$ sudo dd if=/dev/random of=/root/usb-keyfile bs=256 count=1 iflag=fullblock`
+`$ sudo chown root:root /root/usb-keyfile`
+`$ sudo chmod 0600 /root/usb-keyfile`
+
+After creating the keyfile, I strongly suggest that you use GPG to encrypt it
+and then mail a copy to yourself.  Or place a copy on a [M-Disc](https://en.wikipedia.org/wiki/M-DISC) and store that
+disc in a secure location (safe, safe deposit box).  Without the keyfile or the
+password used to encrypt the LUKS volume, you will not be able to recover the
+contents of the USB drive.
 
 # Preparing the drive
 
