@@ -7,7 +7,7 @@ read_config_file ()
   if [ "${Configuration[verbosity]}" -ge "1" ]; then
     echo "Reading config file: $1"
   fi
-  if test -e "$1"; then 
+  if test -f "$1"; then 
     if [ "${Configuration[verbosity]}" -ge "2" ]; then
       echo "The File Exists";
     fi
