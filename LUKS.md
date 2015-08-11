@@ -134,11 +134,19 @@ technology attacker it is not important, but it is still strongly suggested.
 
 ## Format with `cryptsetup`
 
-`cryptsetup luksFormat /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1`
+`$ sudo cryptsetup luksFormat /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1`
+
+You will be prompted for a passphrase which can be used to unlock the volume.
 
 ## Add the keyfile
 
-`cryptsetup luksAddKey /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1 /root/usb-keyfile`
+LUKS volumes can have multiple passphrases or keyfiles associated with them, any one of those can be
+used to unlock the volume.  Since you probably want the volume to unlock automatically when it
+is attached to the host system, you will now add the keyfile to the LUKS volume.
+
+`$ sudo cryptsetup luksAddKey /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1 /root/usb-keyfile`
+
+You will be prompted for the volume's passphrase.
 
 ## Modify udev.d rules
 
