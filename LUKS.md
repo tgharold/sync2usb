@@ -32,9 +32,9 @@ finds the drive will be able to access the contents.
 ## Creating a keyfile
 
 Creation of a keyfile is not difficult.  The following creates a 256 byte file (2048 bits) which is overkill
-for most purposes.  You could get by with a 128 byte file, or go a bit larger.  Note that
-since this uses `/dev/random` which blocks, it may take 10-300 seconds to create the 256 byte file.
-Smaller files (256 byte) will generate faster.
+for most purposes.  You could get by with a 64 or 128 byte file, or go a larger with 512 or 1024 byte files.  
+Note that since this uses `/dev/random` which blocks, it may take dozens of seconds to create the 256 byte file.
+Smaller files (64 or 128 byte) will generate faster.
 
 ```
 $ sudo dd if=/dev/random of=/root/usb-keyfile bs=256 count=1 iflag=fullblock
@@ -47,6 +47,22 @@ and then mail a copy to yourself.  Or place a copy on a [M-Disc](https://en.wiki
 disc in a secure location (safe, safe deposit box).  Without the keyfile or the
 password used to encrypt the LUKS volume, you will not be able to recover the
 contents of the USB drive.
+
+## Choose a passphrase
+
+The size of the passphrase that you choose should be at least 128 bits, and preferably 160 bits.
+If you use a tool that generates completely random output using upper-case letters, lower-case letters and 
+numbers, then you can use a passphrase as short as 32-35 characters.  But I suggest something
+in the 40-50 character range for safety.  A suitable one-liner
+
+```
+$ echo $(dd if=/dev/random bs=256 count=1 iflag=fullblock 2>/dev/null | tr -dc 'a-zA-Z0-9')
+pkjZ92N8eNETvUxLfeYWlYdXBarLpN8XmdJigbQLepHs5tVWVQTJmZSRuQPqek7v
+```
+
+As with the keyfile, you should plan on storing this password somewhere secure (i.e. with GPG)
+and don't leave it laying around in plain-text anywhere.  Consider this to be your recovery
+password in case the keyfile gets lost or destroyed.
 
 # Preparing the drive
 
