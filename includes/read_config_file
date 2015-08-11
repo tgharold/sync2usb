@@ -4,14 +4,20 @@
 # $1 - filename (full path)
 read_config_file () 
 {
-  echo "Reading config file: $1"
+  if [ "${Configuration[verbosity]}" -ge "1" ]; then
+    echo "Reading config file: $1"
+  fi
   if test -f "$1"; then 
-    #echo "The File Exists";
+    if [ "${Configuration[verbosity]}" -ge "2" ]; then
+      echo "The File Exists";
+    fi
     while read line; do
       if [[ "$line" =~ ^[^#]*= ]]; then
         setting_name=$(trim "${line%%=*}");
         setting_value=$(trim "${line#*=}");
-        #echo 'found:' ${setting_name}'='${setting_value}
+        if [ "${Configuration[verbosity]}" -ge "2" ]; then
+          echo 'found:' ${setting_name}'='${setting_value}
+        fi
         case "$setting_name" in
 
           backup_base)
@@ -23,6 +29,7 @@ read_config_file ()
                 exit 1
               fi
             fi
+            if [ "${Configuration[verbosity]}" -ge "2" ]; then echo "SET: ${setting_name}=${Configuration[backup_base]}"; fi
             ;;
 
           backup_dir)
@@ -35,17 +42,19 @@ read_config_file ()
                 exit 1
               fi
             fi
+            if [ "${Configuration[verbosity]}" -ge "2" ]; then echo "SET: ${setting_name}=${Configuration[backup_dir]}"; fi
             ;;
 
-          job_directory)
-            Configuration[job_directory]="${setting_value%/}"
-            if [ "${Configuration[job_directory]}" ]; then
-              if [ ! -d "${Configuration[job_directory]}" ]; then
-                check_message="Directory does not exist."
-                config_error "$1" "${setting_name}" "${Configuration[job_directory]}" "${check_message}"
+          job_dir)
+            Configuration[job_dir]="${setting_value%/}"
+            if [ "${Configuration[job_dir]}" ]; then
+              if [ ! -d "${Configuration[job_dir]}" ]; then
+                check_message="Directory ${Configuration[job_dir]} does not exist."
+                config_error "$1" "${setting_name}" "${Configuration[job_dir]}" "${check_message}"
                 exit 1
               fi
             fi
+            if [ "${Configuration[verbosity]}" -ge "2" ]; then echo "SET: ${setting_name}=${Configuration[job_dir]}"; fi
             ;;
 
           lvm_lvname)
@@ -65,6 +74,7 @@ read_config_file ()
               config_error "$1" "${setting_name}" "${setting_value}" "${check_message}"
               exit 1
             fi
+            if [ "${Configuration[verbosity]}" -ge "2" ]; then echo "SET: ${setting_name}=${Configuration[lvm_lvname]}"; fi
             ;;
 
           lvm_snapshotadd)
@@ -83,10 +93,12 @@ read_config_file ()
                 fi
                 ;;
             esac
+            if [ "${Configuration[verbosity]}" -ge "2" ]; then echo "SET: ${setting_name}=${Configuration[lvm_snapshotadd]}"; fi
             ;;
 
           lvm_thinflag)
             Configuration[lvm_thinflag]="${setting_value}"
+            if [ "${Configuration[verbosity]}" -ge "2" ]; then echo "SET: ${setting_name}=${Configuration[lvm_thinflag]}"; fi
             ;;
 
           lvm_vgname)
@@ -98,6 +110,7 @@ read_config_file ()
                 exit 1
               fi
             fi
+            if [ "${Configuration[verbosity]}" -ge "2" ]; then echo "SET: ${setting_name}=${Configuration[lvm_vgname]}"; fi
             ;;
 
           minimum_free_space)
@@ -118,6 +131,7 @@ read_config_file ()
                 fi
                 ;;
             esac
+            if [ "${Configuration[verbosity]}" -ge "2" ]; then echo "SET: ${setting_name}=${Configuration[minimum_free_space]}"; fi
             ;;
 
           minimum_free_inodes)
@@ -138,6 +152,7 @@ read_config_file ()
                 fi
                 ;;
             esac
+            if [ "${Configuration[verbosity]}" -ge "2" ]; then echo "SET: ${setting_name}=${Configuration[minimum_free_inodes]}"; fi
             ;;
 
           usb_base)
@@ -149,18 +164,28 @@ read_config_file ()
                 exit 1
               fi
             fi
+            if [ "${Configuration[verbosity]}" -ge "2" ]; then echo "SET: ${setting_name}=${Configuration[usb_base]}"; fi
             ;;
 
           usb_prefix)
             Configuration[usb_prefix]="${setting_value}"
+            if [ "${Configuration[verbosity]}" -ge "2" ]; then echo "SET: ${setting_name}=${Configuration[usb_prefix]}"; fi
+            ;;
+
+          usb_dir)
+            Configuration[usb_dir]="${setting_value#/}"
+            Configuration[usb_dir]="${Configuration[usb_dir]%/}"
+            if [ "${Configuration[verbosity]}" -ge "2" ]; then echo "SET: ${setting_name}=${Configuration[usb_dir]}"; fi
             ;;
 
           usb_filename)
             Configuration[usb_filename]="${setting_value}"
+            if [ "${Configuration[verbosity]}" -ge "2" ]; then echo "SET: ${setting_name}=${Configuration[usb_filename]}"; fi
             ;;
 
           usb_suffix)
             Configuration[usb_suffix]="${setting_value}"
+            if [ "${Configuration[verbosity]}" -ge "2" ]; then echo "SET: ${setting_name}=${Configuration[usb_suffix]}"; fi
             ;;
 
           verbosity)
