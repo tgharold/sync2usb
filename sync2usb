@@ -52,6 +52,7 @@ read_config_file ${LocalConfigFilename}
 list_variables "Variables after ${LocalConfigFilename}"
 
 find_JobFiles
+shuffle_JobFiles
 
 push_config_variables
 pop_config_variables

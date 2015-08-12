@@ -2,6 +2,7 @@
 
 # Local all job files, put into the JobFiles() array
 # Uses current value of Configuration[job_dir]
+# http://mywiki.wooledge.org/BashGuide/Arrays
 find_JobFiles() {
   if [ "${Configuration[verbosity]}" -ge "1" ]; then echo "Searching for job files in: ${Configuration[job_dir]}/"; fi
   JobFiles=()
