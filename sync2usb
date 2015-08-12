@@ -39,7 +39,7 @@ source "${SCRIPTDIR}/push_config_variables"
 source "${SCRIPTDIR}/pop_config_variables"
 source "${SCRIPTDIR}/trim"
 source "${SCRIPTDIR}/read_config_file"
-source "${SCRIPTDIR}/shuffle_JobFiles"
+source "${SCRIPTDIR}/shuffles"
 
 list_variables "Default Variables:"
 
