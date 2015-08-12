@@ -14,3 +14,4 @@ shuffle_JobFiles() {
       tmp=${JobFiles[i]} JobFiles[i]=${JobFiles[rand]} JobFiles[rand]=$tmp
    done
 }
+

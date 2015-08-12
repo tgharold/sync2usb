@@ -1,6 +1,13 @@
 #!/bin/bash
 
+# Local all job files, put into the JobFiles() array
+# Uses current value of Configuration[job_dir]
 find_JobFiles() {
-   echo "${JobFiles}"
-
+  if [ "${Configuration[verbosity]}" -ge "1" ]; then echo "Searching for job files in: ${Configuration[job_dir]}/"; fi
+  JobFiles=()
+  while read -r -d ''; do
+    JobFiles+=("$REPLY")
+    if [ "${Configuration[verbosity]}" -ge "2" ]; then echo "FOUND: $REPLY"; fi
+  done < <(find ${Configuration[job_dir]}/*.job -type f -print0)
 }
+

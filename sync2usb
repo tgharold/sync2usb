@@ -40,6 +40,7 @@ source "${SCRIPTDIR}/pop_config_variables"
 source "${SCRIPTDIR}/trim"
 source "${SCRIPTDIR}/read_config_file"
 source "${SCRIPTDIR}/shuffles"
+source "${SCRIPTDIR}/find_JobFiles"
 
 list_variables "Default Variables:"
 
@@ -49,6 +50,8 @@ read_config_file ${UserConfigFilename}
 list_variables "Variables after ${UserConfigFilename}"
 read_config_file ${LocalConfigFilename}
 list_variables "Variables after ${LocalConfigFilename}"
+
+find_JobFiles
 
 push_config_variables
 pop_config_variables
