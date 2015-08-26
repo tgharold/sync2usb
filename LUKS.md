@@ -45,7 +45,7 @@ $ sudo chown root:root /root/usb-keyfile
 $ sudo chmod 0600 /root/usb-keyfile
 ```
 
-After creating the keyfile, I strongly suggest that you use GPG to encrypt
+After creating the keyfile, you should use GPG to encrypt
 it and then mail a copy to yourself.  Or place a copy on a 
 [M-Disc](https://en.wikipedia.org/wiki/M-DISC) and store that disc in a secure
 location (safe, safe deposit box).  Without the keyfile or the password
@@ -98,7 +98,7 @@ system changes.
 
 ## Partition it with `parted`
 
-`$ sudo parted /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0`
+`$ sudo parted /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0\:0`
 
 Assuming the drive is blank, then your first command will be `mklabel gpt`.
 You can verify that the drive is blank, by using the `print` command inside
@@ -127,7 +127,7 @@ service.  The goal of a "burn-in" is to trigger an early failure for a
 drive that is of marginal quality, and to make sure that the drive can
 handle the load.
 
-`$ sudo badblocks -wsv -p 5 -t random /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1`
+`$ sudo badblocks -wsv -p 5 -t random /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0\:0-part1`
 
 That uses the `badblocks` program to write random patterns to the disk over
 and over again until at least five passes do not have any errors.
@@ -147,11 +147,11 @@ drive, which will hide how much of the drive has been used by LUKS for
 actual data storage.  Against the simple and low technology attacker it is
 not important, but it is still strongly suggested.
 
-`$ sudo shred -v /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1`
+`$ sudo shred -v /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0\:0-part1`
 
 ## Format with `cryptsetup`
 
-`$ sudo cryptsetup luksFormat /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1`
+`$ sudo cryptsetup luksFormat /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0\:0-part1`
 
 You will be prompted for a passphrase which can be used to unlock the volume.
 
@@ -162,9 +162,54 @@ them, any one of those can be used to unlock the volume.  Since you
 probably want the volume to unlock automatically when it is attached to the
 host system, you will now add the keyfile to the LUKS volume.
 
-`$ sudo cryptsetup luksAddKey /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1 /root/usb-keyfile`
+`$ sudo cryptsetup luksAddKey /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0\:0-part1 /root/usb-keyfile`
 
 You will be prompted for the volume's passphrase.
+
+## Use luksOpen
+
+Before using `luksOpen` you should decide on a naming scheme for your USB backup drives.
+The `sync2usb` script assumes that you are going to put the same content on one or more
+USB drives that share a naming scheme.  Example naming schemes are:
+
+- USBBKP1A, USBBKP1B, USBBKP1C, USBBKP1D
+- BKP2015A, BKP2015B, BKP2015C
+- OFFSITE1, OFFSITE2, OFFSITE3, OFFSITE4
+
+In this example, I am using the naming scheme of "USBBKP1#" where "#" is "A..Z".
+
+`$ sudo cryptsetup luksOpen --key-file /root/usb-keyfile /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0\:0-part1 USBBKP1A`
+
+The last part of that `luksOpen` statement is the device name that will be created
+under the `/dev/mapper` directory and is needed in the next section.
+
+## Format the LUKS volume
+
+You can use whatever file system you want on your encrypted LUKS volume.  I like
+to stick with ext4 because it is widely supported and reasonably robust.
+
+`mkfs.ext4 -L TGH15B -J size=1024 -b 4096 -i 8192 /dev/mapper/USBBKP1A`
+
+## Find the UUID
+
+In order to get `udev` to automatically unlock your drive when it is attached to
+the system, you need to find the UUID of the partition that you just created.
+
+`$ sudo ls -l /dev/disk/by-id | grep 'usb-HGST_HDN_1234ABC789_123456'`
+
+You will see output that tells you the short alias of the partition.  Look for
+the line that has "-part1" on it and make a note of the 'sdXY' alias.  You then
+use that alias to find the UUID of the device.
+
+`$ sudo ls -l /dev/disk/by-uuid | grep 'sdXY'`
+
+The UUID numbers usually look like '825306e5-1eda-beef-27f3-684ce829b2a4'.
+
+# Auto-mounting using Autfs/udev
+
+
+
+## luksOpen/luksClose scripts
 
 ## Modify udev.d rules
 
@@ -173,8 +218,6 @@ You will be prompted for the volume's passphrase.
 ## Modify autofs configuration file
 
 ## mkfs
-
-# luksOpen/luksClose scripts
 
 # UDEV(cap?) rules
 
