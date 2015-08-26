@@ -190,7 +190,22 @@ to stick with ext4 because it is widely supported and reasonably robust.
 
 `mkfs.ext4 -L TGH15B -J size=1024 -b 4096 -i 8192 /dev/mapper/USBBKP1A`
 
-# Auto-mounting using Autfs/UDEV
+## Find the UUID
+
+In order to get `udev` to automatically unlock your drive when it is attached to
+the system, you need to find the UUID of the partition that you just created.
+
+`$ sudo ls -l /dev/disk/by-id | grep 'usb-HGST_HDN_1234ABC789_123456'`
+
+You will see output that tells you the short alias of the partition.  Look for
+the line that has "-part1" on it and make a note of the 'sdXY' alias.  You then
+use that alias to find the UUID of the device.
+
+`$ sudo ls -l /dev/disk/by-uuid | grep 'sdXY'`
+
+The UUID numbers usually look like '825306e5-1eda-beef-27f3-684ce829b2a4'.
+
+# Auto-mounting using Autfs/udev
 
 
 
