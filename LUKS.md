@@ -98,7 +98,7 @@ system changes.
 
 ## Partition it with `parted`
 
-`$ sudo parted /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0`
+`$ sudo parted /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0\:0`
 
 Assuming the drive is blank, then your first command will be `mklabel gpt`.
 You can verify that the drive is blank, by using the `print` command inside
@@ -127,7 +127,7 @@ service.  The goal of a "burn-in" is to trigger an early failure for a
 drive that is of marginal quality, and to make sure that the drive can
 handle the load.
 
-`$ sudo badblocks -wsv -p 5 -t random /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1`
+`$ sudo badblocks -wsv -p 5 -t random /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0\:0-part1`
 
 That uses the `badblocks` program to write random patterns to the disk over
 and over again until at least five passes do not have any errors.
@@ -147,11 +147,11 @@ drive, which will hide how much of the drive has been used by LUKS for
 actual data storage.  Against the simple and low technology attacker it is
 not important, but it is still strongly suggested.
 
-`$ sudo shred -v /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1`
+`$ sudo shred -v /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0\:0-part1`
 
 ## Format with `cryptsetup`
 
-`$ sudo cryptsetup luksFormat /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1`
+`$ sudo cryptsetup luksFormat /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0\:0-part1`
 
 You will be prompted for a passphrase which can be used to unlock the volume.
 
@@ -162,7 +162,7 @@ them, any one of those can be used to unlock the volume.  Since you
 probably want the volume to unlock automatically when it is attached to the
 host system, you will now add the keyfile to the LUKS volume.
 
-`$ sudo cryptsetup luksAddKey /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1 /root/usb-keyfile`
+`$ sudo cryptsetup luksAddKey /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0\:0-part1 /root/usb-keyfile`
 
 You will be prompted for the volume's passphrase.
 
@@ -178,7 +178,7 @@ USB drives that share a naming scheme.  Example naming schemes are:
 
 In this example, I am using the naming scheme of "USBBKP1#" where "#" is "A..Z".
 
-`$ sudo cryptsetup luksOpen --key-file /root/usb-keyfile /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1 USBBKP1A`
+`$ sudo cryptsetup luksOpen --key-file /root/usb-keyfile /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0\:0-part1 USBBKP1A`
 
 The last part of that `luksOpen` statement is the device name that will be created
 under the `/dev/mapper` directory and is needed in the next section.
