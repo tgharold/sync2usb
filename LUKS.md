@@ -45,7 +45,7 @@ $ sudo chown root:root /root/usb-keyfile
 $ sudo chmod 0600 /root/usb-keyfile
 ```
 
-After creating the keyfile, I strongly suggest that you use GPG to encrypt
+After creating the keyfile, you should use GPG to encrypt
 it and then mail a copy to yourself.  Or place a copy on a 
 [M-Disc](https://en.wikipedia.org/wiki/M-DISC) and store that disc in a secure
 location (safe, safe deposit box).  Without the keyfile or the password
@@ -166,6 +166,36 @@ host system, you will now add the keyfile to the LUKS volume.
 
 You will be prompted for the volume's passphrase.
 
+## Use luksOpen
+
+Before using `luksOpen` you should decide on a naming scheme for your USB backup drives.
+The `sync2usb` script assumes that you are going to put the same content on one or more
+USB drives that share a naming scheme.  Example naming schemes are:
+
+- USBBKP1A, USBBKP1B, USBBKP1C, USBBKP1D
+- BKP2015A, BKP2015B, BKP2015C
+- OFFSITE1, OFFSITE2, OFFSITE3, OFFSITE4
+
+In this example, I am using the naming scheme of "USBBKP1#" where "#" is "A..Z".
+
+`$ sudo cryptsetup luksOpen --key-file /root/usb-keyfile /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0:0-part1 USBBKP1A`
+
+The last part of that `luksOpen` statement is the device name that will be created
+under the `/dev/mapper` directory and is needed in the next section.
+
+## Format the LUKS volume
+
+You can use whatever file system you want on your encrypted LUKS volume.  I like
+to stick with ext4 because it is widely supported and reasonably robust.
+
+`mkfs.ext4 -L TGH15B -J size=1024 -b 4096 -i 8192 /dev/mapper/USBBKP1A`
+
+# Auto-mounting using Autfs/UDEV
+
+
+
+## luksOpen/luksClose scripts
+
 ## Modify udev.d rules
 
 (and trigger the UDEV system)
@@ -173,8 +203,6 @@ You will be prompted for the volume's passphrase.
 ## Modify autofs configuration file
 
 ## mkfs
-
-# luksOpen/luksClose scripts
 
 # UDEV(cap?) rules
 
