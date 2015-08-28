@@ -207,19 +207,77 @@ The UUID numbers usually look like '825306e5-1eda-beef-27f3-684ce829b2a4'.
 
 # Auto-mounting using Autfs/udev
 
+Getting your backup drives to automatically mount and be accessible when you need them
+can be accomplished a few different ways.  My preferred solution is to use
+'udev' in combination with 'autofs' to automatically unlock the volume
+when it is attached and then automatically mount the file system when it
+is referenced.
 
+Please note that there are two steps required when using LUKS to encrypt
+your drive.
+
+1. Open the volume with luksOpen
+2. Mount the volume
 
 ## luksOpen/luksClose scripts
 
+The easiest way to open the volume with luksOpen is to perform that action
+whenever the drive is attached to the host system.  The downside of this
+is that the device is always available for mounting by the 'root' user.
+But the upside is that it's an automatic process and will "just work",
+which is always a positive attribute for backup systems.
+
+I have included two helper scripts in the `sync2usb` project called
+`udev_luksOpen.sh` and `udev_luksClose.sh`.  These two scripts are in the
+`udev` folder at the root of the repository.  You will need to reference
+these scripts when editing the udev.d rules; so make a note of their
+location on your file system.
+
 ## Modify udev.d rules
+
+On CentOS/RHEL 6.x, the udev rules are under `/etc/udev/rules.d`.  I usually use a
+filename of `89-local-usb-backups.rules` which puts the rules towards the botttom
+of the udev rules list.
+
+In order to create the udev rules, you need a few pieces of information:
+- The UUID of the LUKS partition
+- The path to the `udev_luksOpen.sh` and `udev_luksClose.sh` scripts
+- The folder name under `/mnt` where the drives will be mounted
+- The mount name for each drive
+ 
+The following example assumes that your mount point is `/mnt/usbbackup/USBBKP1A`.  
+The first line is a comment that reminds me what the size of the drive is,
+what the label is, the UUID and the path to the keyfile.
+ 
+```
+# 2TB - USBBKP1A /dev/disk/by-uuid/825306e5-1eda-beef-27f3-684ce829b2a4 /root/usb-keyfile
+ACTION=="add", SUBSYSTEMS=="usb", KERNEL=="sd?1", ENV{ID_FS_UUID}=="825306e5-1eda-beef-27f3-684ce829b2a4", RUN+="/usr/local/sbin/sync2usb/udev/udev_luksOpen.sh '%E{ID_FS_UUID}' USBBKP1A /root/usb-keyfile"
+ACTION=="remove", SUBSYSTEMS=="usb", KERNEL=="sd?1", ENV{ID_FS_UUID}=="825306e5-1eda-beef-27f3-684ce829b2a4", RUN+="/usr/local/sbin/sync2usb/udev/udev_luksClose.sh usbbackup USBBKP1A"
+```
 
 (and trigger the UDEV system)
 
+`$ sudo udevadm trigger`
+
+You should be able to look at your system logs to determine whether the drive was
+properly opened by the `udev_luksOpen.sh` script.  For example:
+
+`Aug 27 07:23:13 hostname udev_luksOpen.sh[13625]: EXECUTE: /usr/local/sbin/udev/udev_luksOpen.sh 825306e5-1eda-beef-27f3-684ce829b2a4 USBBKP1A /root/usb-keyfile`
+
+As you plug/unplug the drive, you should see additional entries in your system
+log.  If not, then there is a bug in the `udev_luksOpen.sh` and `udev_luksClose.sh`
+on your system.  You may need to tweak them to work on your system, depending on where
+the `logger` and `cryptsetup` commands are located.
+
+The other test to see whether LUKS and udev have automatically unlocked your drive
+is to look for its label under `/dev/mapper/`.
+
+```
+$ ls -l /dev/mapper/USBBKP1A
+lrwxrwxrwx. 1 root root 7 Aug 27 07:23 /dev/mapper/USBBKP1A -> ../dm-2
+```
+
 ## Modify autofs configuration file
-
-## mkfs
-
-# UDEV(cap?) rules
 
 # Updating AutoFS(?)
 
