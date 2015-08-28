@@ -188,7 +188,7 @@ under the `/dev/mapper` directory and is needed in the next section.
 You can use whatever file system you want on your encrypted LUKS volume.  I like
 to stick with ext4 because it is widely supported and reasonably robust.
 
-`mkfs.ext4 -L USBBKP1A -J size=1024 -b 4096 -i 8192 /dev/mapper/USBBKP1A`
+`sudo mkfs.ext4 -L USBBKP1A -J size=1024 -b 4096 -i 8192 /dev/mapper/USBBKP1A`
 
 ## Find the UUID
 
