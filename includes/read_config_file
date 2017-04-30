@@ -209,7 +209,7 @@ read_config_file ()
             ;;
 
           *)
-            config_error "$1" "${setting_name}" "${setting_value}" "Variable name is not valid."
+            config_error "$1" "${setting_name}" "${setting_value}" "Configuration variable name is not recoginized."
             exit 1
             ;;
         esac;
