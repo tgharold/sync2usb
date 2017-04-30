@@ -13,8 +13,8 @@ read_config_file ()
     fi
     while read line; do
       if [[ "$line" =~ ^[^#]*= ]]; then
-        setting_name=$(trim "${line%%=*}");
-        setting_value=$(trim "${line#*=}");
+        setting_name=$(echo "${line%%=*}" | xargs echo);
+        setting_value=$(echo "${line#*=}" | xargs echo);
         if [ "${Configuration[verbosity]}" -ge "2" ]; then
           echo 'found:' ${setting_name}'='${setting_value}
         fi
