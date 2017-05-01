@@ -1,6 +1,9 @@
 #!/bin/bash
 
-# exit with error
+# report a configuration error
+# $1 = setting name
+# $2 = value of the attempted setting
+# $3 = message
 function config_error()
 {
   echo ""

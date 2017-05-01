@@ -37,7 +37,7 @@ read_config_file ()
             Configuration[backup_dir]="${Configuration[backup_dir]%/}"
             if [ "${Configuration[backup_dir]}" ]; then
               if [ ! -d "${Configuration[backup_base]}/${Configuration[backup_dir]}" ]; then
-                check_message="Directory ${Configuration[backup_base]}/${Configuration[backup_dir]} does not exist."
+                check_message="Directory does not exist."
                 config_error "$1" "${setting_name}" "${Configuration[backup_dir]}" "${check_message}"
                 exit 1
               fi
@@ -49,7 +49,7 @@ read_config_file ()
             Configuration[job_dir]="${setting_value%/}"
             if [ "${Configuration[job_dir]}" ]; then
               if [ ! -d "${Configuration[job_dir]}" ]; then
-                check_message="Directory ${Configuration[job_dir]} does not exist."
+                check_message="Directory does not exist."
                 config_error "$1" "${setting_name}" "${Configuration[job_dir]}" "${check_message}"
                 exit 1
               fi

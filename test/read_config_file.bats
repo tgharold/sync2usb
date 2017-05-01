@@ -18,13 +18,13 @@ load 'libs/bats-assert/load'
 @test "backup_base setting must point at existing directory" {
     run test/read_config_file_stub.sh "${BATS_TEST_DIRNAME}/configs/read_config_file_backup_base_does_not_exist.conf"
     assert_failure
-    assert_output --partial "does not exist"
+    assert_output --partial "Directory does not exist"
 }
 
 @test "backup_dir setting must point at existing directory" {
     run test/read_config_file_stub.sh "${BATS_TEST_DIRNAME}/configs/read_config_file_backup_dir_does_not_exist.conf"
     assert_failure
-    assert_output --partial "does not exist"
+    assert_output --partial "Directory does not exist"
 }
 
 
