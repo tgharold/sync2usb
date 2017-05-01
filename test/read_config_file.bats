@@ -27,6 +27,12 @@ load 'libs/bats-assert/load'
     assert_output --partial "Directory does not exist"
 }
 
+@test "job_dir setting must point at existing directory" {
+    run test/read_config_file_stub.sh "${BATS_TEST_DIRNAME}/configs/read_config_file_job_dir_does_not_exist.conf"
+    assert_failure
+    assert_output --partial "Directory does not exist"
+}
+
 
 
 @test "config variable backup_base gets trimmed" {
