@@ -35,12 +35,10 @@ worry that someone who finds the drive will be able to access the contents.
 Creation of a keyfile is not difficult.  The following creates a 256 byte
 file (2048 bits) which is overkill for most purposes.  You could get by
 with a 64 or 128 byte file, or go a larger with 512 or 1024 byte files.
-Note that since this uses `/dev/random` which blocks, it may take dozens of
-seconds to create the 256 byte file. Smaller files (64 or 128 byte) will
-generate faster.
+
 
 ```
-$ sudo dd if=/dev/random of=/root/usb-keyfile bs=256 count=1 iflag=fullblock
+$ sudo dd if=/dev/urandom of=/root/usb-keyfile bs=256 count=1 iflag=fullblock
 $ sudo chown root:root /root/usb-keyfile
 $ sudo chmod 0600 /root/usb-keyfile
 ```
@@ -62,7 +60,7 @@ in the 40-50 character range (or longer) for safety.  A suitable one-liner
 that generates a random passphrase is:
 
 ```
-$ echo $(dd if=/dev/random bs=256 count=1 iflag=fullblock 2>/dev/null | tr -dc 'a-zA-Z0-9')
+$ echo $(dd if=/dev/urandom bs=256 count=1 iflag=fullblock 2>/dev/null | tr -dc 'a-zA-Z0-9')
 pkjZ92N8eNETvUxLfeYWlYdXBarLpN8XmdJigbQLepHs5tVWVQTJmZSRuQPqek7v
 ```
 
