@@ -127,6 +127,10 @@ handle the load.
 
 `$ sudo badblocks -wsv -p 5 -t random /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0\:0-part1`
 
+For drives larger then 8TB
+
+`$ sudo badblocks -b 65536 -wsv -p 5 -t random /dev/disk/by-id/usb-HGST_HDN_1234ABC789_123456-0\:0-part1`
+
 That uses the `badblocks` program to write random patterns to the disk over
 and over again until at least five passes do not have any errors.
 Depending on the size of your drive and whether you are using USB 2.0 or
