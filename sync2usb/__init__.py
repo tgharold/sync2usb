@@ -1,0 +1,1 @@
+# from .sync2usb import main
