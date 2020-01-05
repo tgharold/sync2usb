@@ -98,7 +98,8 @@ other hand, can and will frequently change.
 
 However, if you have partitions on the disk, an alternative is to use the
 `/dev/disk/by-uuid/` values which are also consistent across reboots and
-system changes.
+system changes.  Note that the partition will not have an UUID until after
+the luksFormat step below.
 
 ## Partition it with `parted`
 
