@@ -64,6 +64,12 @@ $ echo $(dd if=/dev/urandom bs=256 count=1 iflag=fullblock 2>/dev/null | tr -dc 
 pkjZ92N8eNETvUxLfeYWlYdXBarLpN8XmdJigbQLepHs5tVWVQTJmZSRuQPqek7v
 ```
 
+Another possibility is the `pwgen` tool (available on most distros)
+
+```
+$ pwgen -s 40
+```
+
 As with the keyfile, you should plan on storing this password somewhere
 secure (i.e. with GPG) and don't leave it laying around in plain-text
 anywhere.  Consider this to be your recovery password in case the keyfile
