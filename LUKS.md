@@ -64,6 +64,12 @@ $ echo $(dd if=/dev/urandom bs=256 count=1 iflag=fullblock 2>/dev/null | tr -dc 
 pkjZ92N8eNETvUxLfeYWlYdXBarLpN8XmdJigbQLepHs5tVWVQTJmZSRuQPqek7v
 ```
 
+Another possibility is the `pwgen` tool (available on most distros)
+
+```
+$ pwgen -s 40
+```
+
 As with the keyfile, you should plan on storing this password somewhere
 secure (i.e. with GPG) and don't leave it laying around in plain-text
 anywhere.  Consider this to be your recovery password in case the keyfile
@@ -92,7 +98,8 @@ other hand, can and will frequently change.
 
 However, if you have partitions on the disk, an alternative is to use the
 `/dev/disk/by-uuid/` values which are also consistent across reboots and
-system changes.
+system changes.  Note that the partition will not have an UUID until after
+the luksFormat step below.
 
 ## Partition it with `parted`
 
@@ -190,7 +197,7 @@ under the `/dev/mapper` directory and is needed in the next section.
 You can use whatever file system you want on your encrypted LUKS volume.  I like
 to stick with ext4 because it is widely supported and reasonably robust.
 
-`sudo mkfs.ext4 -L USBBKP1A -J size=1024 -b 4096 -i 8192 /dev/mapper/USBBKP1A`
+`sudo mkfs.ext4 -L USBBKP1A -J size=8192 -b 4096 -i 8192 /dev/mapper/USBBKP1A`
 
 ## Find the UUID
 
